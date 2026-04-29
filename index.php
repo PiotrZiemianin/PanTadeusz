@@ -54,7 +54,36 @@
                         fputcsv ($fp,$row,';','"','');
                         fclose ($fp);
                     }
+                    $rows = array_map(fn($v) => str_getcsv($v,";"), file('comments.csv'));
+                    $header = array_shift($rows);
+                    $comments = array();
+                    foreach ($rows as $row){
+                        $comments[] = array_combine($header,$row);
+                    }
+                    foreach ($comments as $comment){
+                        if($comment["Status"] ==  'approved'){
+                            echo '
+                            <div class="card mb-3">
+                                <div class="card-header text-bg-danger">
+                                    '.$comment["E-mail"].'
+                                </div>
+                                <div class="card-body">
+                                    <figure>
+                                        <blockquote class="blockquote">
+                                            <p>'.$comment["Komentarz"].'</p>
+                                        </blockquote>
+                                        <figcaption class="blockquote-footer">
+                                            '.$comment["Pseudonim"].'
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </div>';
+                        }
+                    }
                     echo'
+                            </div>
+                            <div class="col">
+                                <img src="Pan_Tadeusz.png" class="img-fluid mt-3 rounded" alt="Pan Tadeusz">
                                 <form action="" method="post">
                                     <div class="mb-3">
                                         <label for="nick" class="form-label">Pseudonim</label>
@@ -71,12 +100,7 @@
                                     <div class="mb-3">
                                         <button type=""submit class="btn btn-danger">Prześlij</button>
                                     </div>
-                                </form>';
-                       
-                    echo'
-                            </div>
-                            <div class="col">
-                                <img src="Pan_Tadeusz.png" class="img-fluid mt-3 rounded" alt="Pan Tadeusz">                   
+                                </form>                 
                             </div>
                         </div>
                     </div>';
